@@ -1,0 +1,41 @@
+{
+  "name": "ccs-fedex-web-addon",
+  "version": "1.0.0",
+  "description": "CCS AddOn for FedEx website API (scrape)",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "files": [
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "CCSaddons"
+  },
+  "keywords": [
+    "CraftCodeSystems",
+    "FedEx",
+    "Scraping",
+    "API",
+    "CCS",
+    "addon",
+    "CCSaddon"
+  ],
+  "author": "EHammer",
+  "license": "ISC",
+  "dependencies": {
+    "@sparticuz/chromium": "^133.0.0",
+    "rollup": "^4.40.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.2"
+  }
+}
