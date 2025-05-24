@@ -1,0 +1,35 @@
+{
+  "name": "ccs-logging-addon",
+  "version": "1.0.0",
+  "description": "CCS AddOn for logging states, errors and more",
+  "main": "index.ts",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage",
+    "build": "tsc"
+  },
+  "files": [
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "CCSaddons"
+  },
+  "keywords": [
+    "CraftCodeSystems",
+    "Logging",
+    "Log",
+    "CCS",
+    "addon",
+    "CCSaddon"
+  ],
+  "author": "EHammer",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.15.21",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vitest": "^3.1.4"
+  }
+}
