@@ -1,9 +1,9 @@
 import { sndMsgConsole, sndMsgApi, sndMsgSlack } from './functions';
 
-const fedexWebAddon = {
+const loggingAddon = {
     name: 'logging',
     name_friendly: 'Logging library',
-    version: '1.0.2',
+    version: '1.0.3',
     type: 'tooling',
     init() {
       return {
@@ -14,4 +14,4 @@ const fedexWebAddon = {
     }
   };
   
-  export default fedexWebAddon;
+  export default loggingAddon;
