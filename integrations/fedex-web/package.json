@@ -1,6 +1,6 @@
 {
   "name": "ccs-fedex-web-addon",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "CCS AddOn for FedEx website API (scrape)",
   "main": "./src/index.ts",
   "exports": {
