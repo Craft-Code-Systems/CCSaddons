@@ -175,7 +175,7 @@ export function makeMoneybirdFunction<
 ) {
     return async (
         payload: TIn extends void ? undefined : TIn,
-        moneybirdId: number,
+        moneybirdId: string,
         moneybirdToken: string
     ): Promise<ife.funcResponse<TOut>> => {
         const options: any = { genericFlag };

@@ -104,3 +104,10 @@ export interface ccsInvoiceItems {
     item_tax_rate: string
     item_ledger_account: string
 }
+
+export const authFields = [
+    'administration_id',
+    'token'
+] as const
+
+export type authFields = typeof authFields[number]
