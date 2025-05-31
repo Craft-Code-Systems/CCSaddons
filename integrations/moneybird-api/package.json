@@ -1,6 +1,6 @@
 {
   "name": "ccs-moneybird-api-addon",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "CCS AddOn for Moneybird API",
   "main": "./src/index.ts",
   "exports": {
@@ -18,7 +18,7 @@
     "type": "git",
     "url": "CCSaddons"
   },
-    "keywords": [
+  "keywords": [
     "CraftCodeSystems",
     "Moneybird",
     "API",

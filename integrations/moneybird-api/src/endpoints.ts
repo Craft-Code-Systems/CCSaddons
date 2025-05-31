@@ -60,7 +60,7 @@ export async function postApiData(endpoint: string, data: object, administration
         },
         body: JSON.stringify(data)
     };
-
+    
     try {
         const response: Response = await fetch(`https://moneybird.com/api/v2/${administrationId}/${endpoint}`, requestOptions);
 
@@ -175,7 +175,7 @@ export function makeMoneybirdFunction<
 ) {
     return async (
         payload: TIn extends void ? undefined : TIn,
-        moneybirdId: number,
+        moneybirdId: string,
         moneybirdToken: string
     ): Promise<ife.funcResponse<TOut>> => {
         const options: any = { genericFlag };

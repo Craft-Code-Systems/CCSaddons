@@ -1,25 +1,33 @@
 import { getContacts, getContact, getLedgerAccounts, getTaxRates, getDocumentStyles, getWorkflows, createSalesInvoice, createPurchaseInvoice, updatePurchaseInvoice, getPurchaseInvoiceDocument } from './endpoints';
-import { mapInvoiceData } from './functions';
-const moneybirdWebAddon = {
+import { mapSalesInvoiceData, mapPurchaseInvoiceData } from './functions';
+import * as ife from './interface';
+import { authFields } from './interface';
+
+const moneybirdApiAddon = {
     name: 'moneybird-api',
     name_friendly: 'Moneybird API',
-    version: '1.0.0',
+    version: '1.0.4',
+    map_version: '1.0.0',
     type: 'integration',
+    sub_type: 'finance',
+    auth_fields: authFields,
     init() {
       return {
-        getContacts,
-        getContact,
-        getLedgerAccounts,
-        getTaxRates,
-        getDocumentStyles,
-        getWorkflows,
-        createSalesInvoice,
-        getPurchaseInvoiceDocument,
-        createPurchaseInvoice,
-        updatePurchaseInvoice,
-        mapInvoiceData
+        // getContacts,
+        // getContact,
+        // getLedgerAccounts,
+        // getTaxRates,
+        // getDocumentStyles,
+        // getWorkflows,
+        // createSalesInvoice,
+        // getPurchaseInvoiceDocument,
+        // createPurchaseInvoice,
+        // updatePurchaseInvoice,
+        mapSalesInvoiceData,
+        mapPurchaseInvoiceData
       };
     }
   };
   
-  export default moneybirdWebAddon;
+  export type { ife };
+  export default moneybirdApiAddon;
