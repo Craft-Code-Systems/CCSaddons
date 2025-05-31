@@ -1,6 +1,6 @@
 {
   "name": "ccs-logging-addon",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "CCS AddOn for logging states, errors and more",
   "main": "index.ts",
   "scripts": {

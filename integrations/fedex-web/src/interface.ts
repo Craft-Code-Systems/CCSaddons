@@ -22,3 +22,15 @@ export interface shipmentInfo{
     shipment_tnt: string;
 
 }
+
+export const authFields = [
+    'web_bearer_token',
+    'web_client_id',
+    'web_client_username',
+    'web_client_password',
+    'web_client_cookie',
+    'web_account_number',
+    'web_transaction_id'
+] as const
+
+export type authFields = typeof authFields[number]

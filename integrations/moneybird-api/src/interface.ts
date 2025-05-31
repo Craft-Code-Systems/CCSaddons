@@ -7,7 +7,7 @@ export interface funcResponse<T = any> {
 
 export interface moneybirdContact {
     id: string,
-    administration_id: number,
+    administration_id: string,
     company_name: string,
     email: string,
     firstname: string,
@@ -23,14 +23,14 @@ export interface moneybirdContact {
 
 export interface moneybirdLedgerAccounts {
     id: string,
-    administration_id: number,
+    administration_id: string,
     name: string,
     type: string
 }
 
 export interface moneybirdTaxRates {
     id: string,
-    administration_id: number,
+    administration_id: string,
     name: string,
     percentage: string,
     tax_rate_type: string
@@ -38,20 +38,20 @@ export interface moneybirdTaxRates {
 
 export interface moneybirdWorkflow {
     id: string,
-    administration_id: number,
+    administration_id: string,
     type: string,
     name: string
 }
 
 export interface moneybirdDocumentStyle {
     id: string,
-    administration_id: number,
+    administration_id: string,
     name: string
 }
 
 export interface moneybirdSalesInvoiceData {
     id?: string,
-    administration_id: number,
+    administration_id: string,
     contact_id: string,
     contact_person_id?: string,
     document_style_id?: number,
@@ -64,7 +64,9 @@ export interface moneybirdSalesInvoiceData {
 
 export interface moneybirdPurchaseInvoiceData {
     id?: string,
-    administration_id: number,
+    date: string,
+    due_date?: string,
+    administration_id: string,
     contact_id: string,
     contact_person_id?: string,
     document_style_id?: number,
@@ -96,6 +98,15 @@ export interface ccsSalesInvoice {
     invoice_items: ccsInvoiceItems[]
 }
 
+export interface ccsPurchaseInvoice {
+    invoice_from: string,
+    invoice_type: string,
+    invoice_reference: string,
+    invoice_date: string,
+    invoice_due_date: string,
+    invoice_items: ccsInvoiceItems[]
+}
+
 export interface ccsInvoiceItems {
     item_description: string,
     item_quantity: number,
@@ -104,3 +115,10 @@ export interface ccsInvoiceItems {
     item_tax_rate: string
     item_ledger_account: string
 }
+
+export const authFields = [
+    'administration_id',
+    'token'
+] as const
+
+export type authFields = typeof authFields[number]
