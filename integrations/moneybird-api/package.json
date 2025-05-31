@@ -1,6 +1,6 @@
 {
   "name": "ccs-moneybird-api-addon",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "CCS AddOn for Moneybird API",
   "main": "./src/index.ts",
   "exports": {

@@ -60,7 +60,7 @@ export async function postApiData(endpoint: string, data: object, administration
         },
         body: JSON.stringify(data)
     };
-
+    
     try {
         const response: Response = await fetch(`https://moneybird.com/api/v2/${administrationId}/${endpoint}`, requestOptions);
 
