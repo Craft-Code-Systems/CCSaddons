@@ -3,24 +3,26 @@ import { mapSalesInvoiceData, mapPurchaseInvoiceData } from './functions';
 import * as ife from './interface';
 import { authFields } from './interface';
 
-const moneybirdWebAddon = {
+const moneybirdApiAddon = {
     name: 'moneybird-api',
     name_friendly: 'Moneybird API',
-    version: '1.0.3',
+    version: '1.0.4',
+    map_version: '1.0.0',
     type: 'integration',
+    sub_type: 'finance',
     auth_fields: authFields,
     init() {
       return {
-        getContacts,
-        getContact,
-        getLedgerAccounts,
-        getTaxRates,
-        getDocumentStyles,
-        getWorkflows,
-        createSalesInvoice,
-        getPurchaseInvoiceDocument,
-        createPurchaseInvoice,
-        updatePurchaseInvoice,
+        // getContacts,
+        // getContact,
+        // getLedgerAccounts,
+        // getTaxRates,
+        // getDocumentStyles,
+        // getWorkflows,
+        // createSalesInvoice,
+        // getPurchaseInvoiceDocument,
+        // createPurchaseInvoice,
+        // updatePurchaseInvoice,
         mapSalesInvoiceData,
         mapPurchaseInvoiceData
       };
@@ -28,4 +30,4 @@ const moneybirdWebAddon = {
   };
   
   export type { ife };
-  export default moneybirdWebAddon;
+  export default moneybirdApiAddon;
