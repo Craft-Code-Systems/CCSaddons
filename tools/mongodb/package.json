@@ -1,0 +1,38 @@
+{
+  "name": "ccs-mongodb-addon",
+  "version": "1.0.0",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "CCSaddons"
+  },
+  "keywords": [
+    "CraftCodeSystems",
+    "Logging",
+    "Log",
+    "CCS",
+    "addon",
+    "CCSaddon"
+  ],
+  "author": "EHammer",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "mongodb": "^6.16.0"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "^10.1.4",
+    "vitest": "^3.2.0"
+  }
+}
