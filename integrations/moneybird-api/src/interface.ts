@@ -116,6 +116,11 @@ export interface ccsInvoiceItems {
     item_ledger_account: string
 }
 
+export interface AuthFields {
+    administration_id: string,
+    token: string
+}
+
 export const authFields = [
     'administration_id',
     'token'

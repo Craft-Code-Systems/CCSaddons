@@ -6,7 +6,7 @@ import { authFields } from './interface';
 const moneybirdApiAddon = {
     name: 'moneybird-api',
     name_friendly: 'Moneybird API',
-    version: '1.0.4',
+    version: '1.0.5',
     map_version: '1.0.0',
     type: 'integration',
     sub_type: 'finance',
@@ -19,10 +19,10 @@ const moneybirdApiAddon = {
         // getTaxRates,
         // getDocumentStyles,
         // getWorkflows,
-        // createSalesInvoice,
-        // getPurchaseInvoiceDocument,
-        // createPurchaseInvoice,
-        // updatePurchaseInvoice,
+        createSalesInvoice,
+        getPurchaseInvoiceDocument,
+        createPurchaseInvoice,
+        updatePurchaseInvoice,
         mapSalesInvoiceData,
         mapPurchaseInvoiceData
       };

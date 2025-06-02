@@ -9,8 +9,9 @@ import * as ife from '../src/interface';
 
 // --- Tests for mapPurchaseInvoiceData ---
 describe('mapPurchaseInvoiceData', () => {
-  const dummyToken = 'token';
-  const dummyId = '123'; // note: moneybirdId is a string in the function signature
+  const dummyId = 'admin123';
+  const dummyToken = 'tokenABC';
+  const dummyAuthFields: ife.AuthFields = { administration_id: dummyId, token: dummyToken };
 
   // Reset all mocks between tests
   beforeEach(() => {
@@ -61,8 +62,7 @@ describe('mapPurchaseInvoiceData', () => {
     // Call the function under test
     const result = await mapPurchaseInvoiceData(
       invoiceData,
-      dummyToken,
-      dummyId,
+      dummyAuthFields,
       /* taxed= */ false
     );
 
@@ -128,8 +128,7 @@ describe('mapPurchaseInvoiceData', () => {
 
     const result = await mapPurchaseInvoiceData(
       invoiceData,
-      dummyToken,
-      dummyId,
+      dummyAuthFields,
       /* taxed= */ true
     );
 
@@ -171,8 +170,7 @@ describe('mapPurchaseInvoiceData', () => {
 
     const result = await mapPurchaseInvoiceData(
       invoiceData,
-      dummyToken,
-      dummyId,
+      dummyAuthFields,
       /* taxed= */ false
     );
 
@@ -205,8 +203,7 @@ describe('mapPurchaseInvoiceData', () => {
 
     const result = await mapPurchaseInvoiceData(
       invoiceData,
-      dummyToken,
-      dummyId,
+      dummyAuthFields,
       /* taxed= */ false
     );
 
@@ -244,8 +241,7 @@ describe('mapPurchaseInvoiceData', () => {
 
     const result = await mapPurchaseInvoiceData(
       invoiceData,
-      dummyToken,
-      dummyId,
+      dummyAuthFields,
       /* taxed= */ false
     );
 

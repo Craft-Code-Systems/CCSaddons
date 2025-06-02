@@ -10,17 +10,17 @@ import * as ife from './interface';
  * @returns The API response or an error object if the response was not OK.
  * @throws Error if the API request failed.
  */
-export async function getApiData(endpoint: string, parameters: string, administrationId: string, token: string, isJson: boolean): Promise<ife.funcResponse> {
+export async function getApiData(endpoint: string, parameters: string, auth_fields: ife.AuthFields, isJson: boolean): Promise<ife.funcResponse> {
     const options: RequestInit = {
         method: 'GET',
         headers: {
-            'Authorization': `Bearer ${token}`,
+            'Authorization': `Bearer ${auth_fields.token}`,
             'Content-Type': 'application/json'
         }
     };
 
     try {
-        const response = await fetch(`https://moneybird.com/api/v2/${administrationId}/${endpoint}?${parameters}`, options);
+        const response = await fetch(`https://moneybird.com/api/v2/${auth_fields.administration_id}/${endpoint}?${parameters}`, options);
 
         if (!response.ok) {
             return { status: 'ERROR', error: `${response.status} - ${response.statusText}` };
@@ -51,18 +51,18 @@ export async function getApiData(endpoint: string, parameters: string, administr
  * @returns The API response or an error object if the response was not OK.
  * @throws Error if the API request failed.
  */
-export async function postApiData(endpoint: string, data: object, administrationId: string, token: string): Promise<ife.funcResponse> {
+export async function postApiData(endpoint: string, data: object, auth_fields: ife.AuthFields): Promise<ife.funcResponse> {
     const requestOptions: RequestInit = {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${token}`,
+            'Authorization': `Bearer ${auth_fields.token}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
     };
     
     try {
-        const response: Response = await fetch(`https://moneybird.com/api/v2/${administrationId}/${endpoint}`, requestOptions);
+        const response: Response = await fetch(`https://moneybird.com/api/v2/${auth_fields.administration_id}/${endpoint}`, requestOptions);
 
         if (!response.ok || ![200, 201, 202].includes(response.status)) {
             return { status: "ERROR", error: `${response.status} - ${response.statusText}` };
@@ -84,11 +84,11 @@ export async function postApiData(endpoint: string, data: object, administration
  * @param token The Moneybird API token.
  * @returns The API response or an error object if the response was not OK.
  */
-export async function patchApiData(endpoint: string, data: object, administrationId: string, token: string): Promise<ife.funcResponse> {
+export async function patchApiData(endpoint: string, data: object, auth_fields: ife.AuthFields): Promise<ife.funcResponse> {
     const requestOptions: RequestInit = {
         method: 'PATCH',
         headers: {
-            'Authorization': `Bearer ${token}`,
+            'Authorization': `Bearer ${auth_fields.token}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(data, (_, value) =>
@@ -97,7 +97,7 @@ export async function patchApiData(endpoint: string, data: object, administratio
     };
 
     try {
-        const response: Response = await fetch(`https://moneybird.com/api/v2/${administrationId}/${endpoint}`, requestOptions);
+        const response: Response = await fetch(`https://moneybird.com/api/v2/${auth_fields.administration_id}/${endpoint}`, requestOptions);
 
         if (!response.ok || ![200, 201, 202].includes(response.status)) {
             return { status: "ERROR", error: `${response.status} - ${response.statusText}` };
@@ -119,8 +119,7 @@ export type Method = 'get' | 'post' | 'patch';
 export async function moneybirdRequest<T>(
     method: Method,
     endpoint: string,
-    moneybirdId: number,
-    moneybirdToken: string,
+    auth_fields: ife.AuthFields,
     options?: {
         query?: string;
         genericFlag?: boolean;
@@ -134,8 +133,7 @@ export async function moneybirdRequest<T>(
             response = await getApiData(
                 endpoint,
                 options?.query ?? '',
-                moneybirdId.toString(),
-                moneybirdToken,
+                auth_fields,
                 !!options?.genericFlag
             );
             break;
@@ -143,16 +141,14 @@ export async function moneybirdRequest<T>(
             response = await postApiData(
                 endpoint,
                 options?.body,
-                moneybirdId.toString(),
-                moneybirdToken
+                auth_fields
             );
             break;
         case 'patch':
             response = await patchApiData(
                 endpoint,
                 options?.body,
-                moneybirdId.toString(),
-                moneybirdToken
+                auth_fields
             );
             break;
     }
@@ -175,8 +171,7 @@ export function makeMoneybirdFunction<
 ) {
     return async (
         payload: TIn extends void ? undefined : TIn,
-        moneybirdId: string,
-        moneybirdToken: string
+        auth_fields: ife.AuthFields
     ): Promise<ife.funcResponse<TOut>> => {
         const options: any = { genericFlag };
         let endpoint = endpointTemplate;
@@ -209,8 +204,7 @@ export function makeMoneybirdFunction<
         return module.moneybirdRequest<TOut>(
             method,
             endpoint,
-            moneybirdId,
-            moneybirdToken,
+            auth_fields,
             options
         );
     };

@@ -1,27 +1,27 @@
 import * as ife from './interface';
 import { getContact, getWorkflow, getTaxRates, getLedgerAccounts } from './endpoints';
 
-export async function mapSalesInvoiceData(invoiceData: ife.ccsSalesInvoice, moneybirdToken: string, moneybirdId: string): Promise<ife.funcResponse> {
+export async function mapSalesInvoiceData(invoiceData: ife.ccsSalesInvoice, auth_fields: ife.AuthFields): Promise<ife.funcResponse> {
     try{
-        const contactResponse = await getContact(`query=${invoiceData.invoice_client_company}`, moneybirdId, moneybirdToken);
+        const contactResponse = await getContact(`query=${invoiceData.invoice_client_company}`, auth_fields.administration_id, auth_fields.token);
         if (contactResponse.status === 'ERROR') {
             return {status: 'ERROR', error: 'Contact ID not found for company: ' + invoiceData.invoice_client_company};
         }
         const contact_id: string = contactResponse.data![0].id;
 
-        const workflowResponse = await getWorkflow(`query=${invoiceData.invoice_client_billing_period}`, moneybirdId, moneybirdToken);
+        const workflowResponse = await getWorkflow(`query=${invoiceData.invoice_client_billing_period}`, auth_fields.administration_id, auth_fields.token);
         if (workflowResponse.status === 'ERROR') {
             return {status: 'ERROR', error: 'Workflow ID not found for billing period: ' + invoiceData.invoice_client_billing_period};
         }
         const workflow_id: number = workflowResponse.data![0].id;
 
-        const taxRatesResponse = await getTaxRates(undefined, moneybirdId, moneybirdToken);
+        const taxRatesResponse = await getTaxRates(undefined, auth_fields.administration_id, auth_fields.token);
         if (taxRatesResponse.status === 'ERROR') {
             return {status: 'ERROR', error: 'Tax rate ID not found'};
         }
         const taxRates = taxRatesResponse.data?.map((taxRate: any) => taxRate as ife.moneybirdTaxRates);
 
-        const ledgerAccountsResponse = await getLedgerAccounts(undefined, moneybirdId, moneybirdToken);
+        const ledgerAccountsResponse = await getLedgerAccounts(undefined, auth_fields.administration_id, auth_fields.token);
         if (ledgerAccountsResponse.status === 'ERROR') {
             return {status: 'ERROR', error: 'Ledger account ID not found'};
         }
@@ -29,7 +29,7 @@ export async function mapSalesInvoiceData(invoiceData: ife.ccsSalesInvoice, mone
 
 
     const mapped_data: ife.moneybirdSalesInvoiceData = {
-        administration_id: moneybirdId,
+        administration_id: auth_fields.administration_id,
         contact_id: contact_id,
         // document_style_id: invoiceData.document_style_id,
         workflow_id: workflow_id,
@@ -51,21 +51,21 @@ export async function mapSalesInvoiceData(invoiceData: ife.ccsSalesInvoice, mone
 }
 
 
-export async function mapPurchaseInvoiceData(invoiceData: ife.ccsPurchaseInvoice, moneybirdToken: string, moneybirdId: string, taxed: boolean): Promise<ife.funcResponse> {
+export async function mapPurchaseInvoiceData(invoiceData: ife.ccsPurchaseInvoice,  auth_fields: ife.AuthFields, taxed: boolean): Promise<ife.funcResponse> {
     try{
-        const contactResponse = await getContact(`query=${invoiceData.invoice_from}`, moneybirdId, moneybirdToken);
+        const contactResponse = await getContact(`query=${invoiceData.invoice_from}`, auth_fields.administration_id, auth_fields.token);
         if (contactResponse.status === 'ERROR') {
             return {status: 'ERROR', error: 'Contact ID not found for company: ' + invoiceData.invoice_from};
         }
         const contact_id: string = contactResponse.data![0].id;
 
-        const taxRatesResponse = await getTaxRates(undefined, moneybirdId, moneybirdToken);
+        const taxRatesResponse = await getTaxRates(undefined, auth_fields.administration_id, auth_fields.token);
         if (taxRatesResponse.status === 'ERROR') {
             return {status: 'ERROR', error: 'Tax rate ID not found'};
         }
         const taxRates = taxRatesResponse.data?.map((taxRate: any) => taxRate as ife.moneybirdTaxRates);
 
-        const ledgerAccountsResponse = await getLedgerAccounts(undefined, moneybirdId, moneybirdToken);
+        const ledgerAccountsResponse = await getLedgerAccounts(undefined, auth_fields.administration_id, auth_fields.token);
         if (ledgerAccountsResponse.status === 'ERROR') {
             return {status: 'ERROR', error: 'Ledger account ID not found'};
         }
@@ -73,7 +73,7 @@ export async function mapPurchaseInvoiceData(invoiceData: ife.ccsPurchaseInvoice
 
 
     const mapped_data: ife.moneybirdPurchaseInvoiceData = {
-        administration_id: moneybirdId,
+        administration_id: auth_fields.administration_id,
         contact_id: contact_id,
         // document_style_id: invoiceData.document_style_id,
         date: convertInvoiceDate(invoiceData.invoice_date),

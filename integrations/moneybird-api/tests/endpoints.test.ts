@@ -12,6 +12,7 @@ import * as ife from '../src/interface';
 
 const dummyId = 'admin123';
 const dummyToken = 'tokenABC';
+const dummyAuthFields: ife.AuthFields = { administration_id: dummyId, token: dummyToken };
 
 // Reset fetch stubs between each test
 beforeEach(() => {
@@ -47,7 +48,7 @@ describe('getApiData', () => {
             mockResponse(200, 'OK', { 'content-type': 'application/json' }, payload)
         );
 
-        const result = await getApiData('endpoint.json', 'a=1', dummyId, dummyToken, true);
+        const result = await getApiData('endpoint.json', 'a=1', dummyAuthFields, true);
         expect(result).toEqual<ife.funcResponse>({ status: 'OK', data: payload });
         expect(global.fetch).toHaveBeenCalledWith(
             `https://moneybird.com/api/v2/${dummyId}/endpoint.json?a=1`,
@@ -60,7 +61,7 @@ describe('getApiData', () => {
         (global.fetch as any).mockResolvedValue(
             mockResponse(200, 'OK', { 'content-type': 'application/pdf' }, buf)
         );
-        const result = await getApiData('file.pdf', '', dummyId, dummyToken, false);
+        const result = await getApiData('file.pdf', '', dummyAuthFields, false);
         expect(result).toEqual<ife.funcResponse>({ status: 'OK', data: buf });
     });
 
@@ -68,7 +69,7 @@ describe('getApiData', () => {
         (global.fetch as any).mockResolvedValue(
             mockResponse(200, 'OK', { 'content-type': 'text/plain' }, 'xyz')
         );
-        const result = await getApiData('file', '', dummyId, dummyToken, false);
+        const result = await getApiData('file', '', dummyAuthFields, false);
         expect(result.status).toBe('ERROR');
         expect(result.error).toMatch(/Unexpected Content-Type/);
     });
@@ -77,13 +78,13 @@ describe('getApiData', () => {
         (global.fetch as any).mockResolvedValue(
             mockResponse(404, 'Not Found', { 'content-type': 'application/json' }, {})
         );
-        const result = await getApiData('missing.json', '', dummyId, dummyToken, true);
+        const result = await getApiData('missing.json', '', dummyAuthFields, true);
         expect(result).toEqual<ife.funcResponse>({ status: 'ERROR', error: '404 - Not Found' });
     });
 
     it('returns error on fetch throw', async () => {
         (global.fetch as any).mockRejectedValue(new Error('network'));
-        const result = await getApiData('x', '', dummyId, dummyToken, true);
+        const result = await getApiData('x', '', dummyAuthFields, true);
         expect(result.status).toBe('ERROR');
         expect(result.error).toContain('network');
     });
@@ -95,7 +96,7 @@ describe('postApiData', () => {
         (global.fetch as any).mockResolvedValue(
             mockResponse(200, 'OK', { 'content-type': 'application/json' }, body)
         );
-        const result = await postApiData('ep', { x: 1 }, dummyId, dummyToken);
+        const result = await postApiData('ep', { x: 1 }, dummyAuthFields);
         expect(result).toEqual<ife.funcResponse>({ status: 'OK', data: body });
     });
 
@@ -103,14 +104,14 @@ describe('postApiData', () => {
         (global.fetch as any).mockResolvedValue(
             mockResponse(500, 'Err', {}, {})
         );
-        const result = await postApiData('ep', {}, dummyId, dummyToken);
+        const result = await postApiData('ep', {}, dummyAuthFields);
         expect(result.status).toBe('ERROR');
         expect(result.error).toBe('500 - Err');
     });
 
     it('returns ERROR on fetch throw', async () => {
         (global.fetch as any).mockRejectedValue('fail');
-        const result = await postApiData('ep', {}, dummyId, dummyToken);
+        const result = await postApiData('ep', {}, dummyAuthFields);
         expect(result.status).toBe('ERROR');
     });
 });
@@ -121,7 +122,7 @@ describe('patchApiData', () => {
         (global.fetch as any).mockResolvedValue(
             mockResponse(201, 'Created', { 'content-type': 'application/json' }, body)
         );
-        const result = await patchApiData('ep', { foo: BigInt(123) }, dummyId, dummyToken);
+        const result = await patchApiData('ep', { foo: BigInt(123) }, dummyAuthFields);
         expect(global.fetch).toHaveBeenCalledWith(
             `https://moneybird.com/api/v2/${dummyId}/ep`,
             expect.objectContaining({
@@ -136,7 +137,7 @@ describe('patchApiData', () => {
         (global.fetch as any).mockResolvedValue(
             mockResponse(400, 'Bad', {}, {})
         );
-        const result = await patchApiData('ep', {}, dummyId, dummyToken);
+        const result = await patchApiData('ep', {}, dummyAuthFields);
         expect(result.status).toBe('ERROR');
     });
 });
@@ -146,9 +147,9 @@ describe('makeMoneybirdFunction', () => {
         const spy = vi.spyOn(endpoints, 'moneybirdRequest')
             .mockResolvedValue({ status: 'OK', data: ['x'] });
         const fn = makeMoneybirdFunction<void, string[]>('get', 'endpoint', true);
-        const res = await fn(undefined, dummyId, dummyToken);
+        const res = await fn(undefined, dummyAuthFields);
         expect(spy).toHaveBeenCalledWith(
-            'get', 'endpoint', dummyId, dummyToken, { genericFlag: true }
+            'get', 'endpoint', dummyAuthFields, { genericFlag: true }
         );
         expect(res).toEqual({ status: 'OK', data: ['x'] });
     });
@@ -157,9 +158,9 @@ describe('makeMoneybirdFunction', () => {
         const spy = vi.spyOn(endpoints, 'moneybirdRequest')
             .mockResolvedValue({ status: 'OK', data: { ok: true } });
         const fn = makeMoneybirdFunction<{ a: number }, { ok: boolean }>('post', 'ep');
-        const res = await fn({ a: 5 }, dummyId, dummyToken);
+        const res = await fn({ a: 5 }, dummyAuthFields);
         expect(spy).toHaveBeenCalledWith(
-            'post', 'ep', dummyId, dummyToken, expect.objectContaining({ body: { a: 5 } })
+            'post', 'ep', dummyAuthFields, expect.objectContaining({ body: { a: 5 } })
         );
         expect(res).toEqual({ status: 'OK', data: { ok: true } });
     });
@@ -170,9 +171,9 @@ describe('makeMoneybirdFunction', () => {
         const fn = makeMoneybirdFunction<{ id: string }, { patched: boolean }>(
             'patch', 'ep/:id'
         );
-        const res = await fn({ id: '123' }, dummyId, dummyToken);
+        const res = await fn({ id: '123' }, dummyAuthFields);
         expect(spy).toHaveBeenCalledWith(
-            'patch', 'ep/123', dummyId, dummyToken,
+            'patch', 'ep/123', dummyAuthFields,
             expect.objectContaining({ body: { id: '123' }, genericFlag: false })
         );
         expect(res).toEqual({ status: 'OK', data: { patched: true } });
