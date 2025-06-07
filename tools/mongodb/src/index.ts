@@ -5,7 +5,7 @@ import { authFields } from './interface';
 const mongodbAddon = {
     name: 'mongodb',
     name_friendly: 'MongoDB',
-    version: '1.0.0',
+    version: '1.0.1',
     map_version: '0.0.0',
     type: 'tool',
     sub_type: 'db',

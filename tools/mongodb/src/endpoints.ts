@@ -78,37 +78,54 @@ export async function dbUpdate(client: MongoClient, dbName: string, colName: str
     }
 }
 
-export async function dbRead(client: MongoClient, dbName: string, colName: string, qry: any): Promise<ife.funcResponse> {
-    try {
-        let result: ife.funcResponse = {
-            status: 'OK',
-            data: null,
-            error: undefined
-        };
+export async function dbRead(
+  client: MongoClient,
+  dbName: string,
+  colName: string,
+  qry: any,
+  pln: any
+): Promise<ife.funcResponse> {
+  try {
+    let result: ife.funcResponse = {
+      status: 'OK',
+      data: null,
+      error: undefined
+    };
 
-        await client.connect();
-        const db = client.db(dbName);
-        const collection = db.collection(colName);
+    await client.connect();
+    const db = client.db(dbName);
+    const collection = db.collection(colName);
 
-        const insertResult = await collection.find(qry).toArray();
-        // Check if the insert was successful
-        if (insertResult) {
-            result.data = insertResult;
-        } else {
-            result.status = 'ERROR';
-            result.error = 'Insert failed witht error: ' + insertResult + ' with data: ' + qry;
-
-        }
-
-        client.close();
-        return result;
-    } catch (error) {
-        return {
-            status: 'ERROR',
-            data: null,
-            error: error
-        }
+    let insertResult;
+    if (qry) {
+      // qry must be a plain JS object, not a string
+      insertResult = await collection.find(qry).toArray();
+      if (insertResult) {
+        result.data = insertResult;
+      } else {
+        result.status = 'ERROR';
+        result.error = 'Find returned no results (qry=' + JSON.stringify(qry) + ')';
+      }
+    } else {
+      // pln must be an Array of pipeline stage objects
+      insertResult = await collection.aggregate(pln).toArray();
+      if (insertResult) {
+        result.data = insertResult;
+      } else {
+        result.status = 'ERROR';
+        result.error = 'Aggregate returned no results (pln=' + JSON.stringify(pln) + ')';
+      }
     }
+
+    await client.close();
+    return result;
+  } catch (error) {
+    return {
+      status: 'ERROR',
+      data: null,
+      error
+    };
+  }
 }
 
 export async function dbDelete(client: MongoClient, dbName: string, colName: string, qry: any): Promise<ife.funcResponse> {
