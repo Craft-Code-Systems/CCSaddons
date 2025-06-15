@@ -5,7 +5,7 @@ import { authFields } from './interface';
 const loggingAddon = {
     name: 'logging',
     name_friendly: 'Logging library',
-    version: '1.0.5',
+    version: '1.0.7',
     sub_type: 'logging',
     map_version: '0.0.0',
     type: 'tooling',
