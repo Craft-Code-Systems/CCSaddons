@@ -20,7 +20,6 @@ export async function dbCreate(client: MongoClient, dbName: string, colName: str
             error: undefined
         };
 
-        await client.connect();
         const db = client.db(dbName);
         const collection = db.collection(colName);
 
@@ -34,7 +33,6 @@ export async function dbCreate(client: MongoClient, dbName: string, colName: str
 
         }
 
-        client.close();
         return result;
     } catch (error) {
         return {
@@ -53,7 +51,6 @@ export async function dbUpdate(client: MongoClient, dbName: string, colName: str
             error: undefined
         };
 
-        await client.connect();
         const db = client.db(dbName);
         const collection = db.collection(colName);
 
@@ -67,7 +64,6 @@ export async function dbUpdate(client: MongoClient, dbName: string, colName: str
 
         }
 
-        client.close();
         return result;
     } catch (error) {
         return {
@@ -92,7 +88,6 @@ export async function dbRead(
       error: undefined
     };
 
-    await client.connect();
     const db = client.db(dbName);
     const collection = db.collection(colName);
 
@@ -116,8 +111,6 @@ export async function dbRead(
         result.error = 'Aggregate returned no results (pln=' + JSON.stringify(pln) + ')';
       }
     }
-
-    await client.close();
     return result;
   } catch (error) {
     return {
@@ -135,8 +128,6 @@ export async function dbDelete(client: MongoClient, dbName: string, colName: str
             data: null,
             error: undefined
         };
-
-        await client.connect();
         const db = client.db(dbName);
         const collection = db.collection(colName);
 
@@ -150,7 +141,6 @@ export async function dbDelete(client: MongoClient, dbName: string, colName: str
 
         }
 
-        client.close();
         return result;
     } catch (error) {
         return {
@@ -160,3 +150,36 @@ export async function dbDelete(client: MongoClient, dbName: string, colName: str
         }
     }
 }   
+
+
+export async function dbCon(client: MongoClient): Promise<ife.funcResponse> {
+    let result: ife.funcResponse = {
+        status: 'OK',
+        data: null,
+        error: undefined
+    };
+    try {
+        await client.connect();
+        result.data = 'Connected';
+    } catch (error) {
+        result.status = 'ERROR';
+        result.error = error;
+    }
+    return result;
+}
+
+export async function dbCls(client: MongoClient): Promise<ife.funcResponse> {
+    let result: ife.funcResponse = {
+        status: 'OK',
+        data: null,
+        error: undefined
+    };
+    try {
+        await client.close();
+        result.data = 'Closed connection';
+    } catch (error) {
+        result.status = 'ERROR';
+        result.error = error;
+    }
+    return result;
+}

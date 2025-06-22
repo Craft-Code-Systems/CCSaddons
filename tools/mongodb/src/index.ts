@@ -1,11 +1,11 @@
-import { dbCreate, dbUpdate, dbAuth, dbRead, dbDelete } from './endpoints';
+import { dbCreate, dbUpdate, dbAuth, dbRead, dbDelete, dbCon, dbCls } from './endpoints';
 import * as ife from './interface';
 import { authFields } from './interface';
 
 const mongodbAddon = {
     name: 'mongodb',
     name_friendly: 'MongoDB',
-    version: '1.0.1',
+    version: '1.0.2',
     map_version: '0.0.0',
     type: 'tool',
     sub_type: 'db',
@@ -16,7 +16,9 @@ const mongodbAddon = {
         dbUpdate,
         dbAuth,
         dbRead,
-        dbDelete
+        dbDelete,
+        dbCon,
+        dbCls
       };
     }
   };
